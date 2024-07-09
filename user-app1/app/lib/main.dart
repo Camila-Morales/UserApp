@@ -6,6 +6,7 @@ import 'dart:convert';
 void main() {
   runApp(
     MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: HomePage(),
     ),
   );
@@ -20,8 +21,19 @@ class _HomePageState extends State<HomePage> {
   late Map data;
   late List userData = [];
 
+  Future<void> createUsers() async {
+    final response =
+        await http.get(Uri.parse('http://localhost:4000/api/users/create'));
+    data = json.decode(response.body);
+
+    setState(() {
+      userData = data['users'];
+    });
+  }
+
   Future<void> getUsers() async {
-    final response = await http.get(Uri.parse('http://localhost:4000/api/users'));
+    final response =
+        await http.get(Uri.parse('http://localhost:4000/api/users'));
     data = json.decode(response.body);
 
     setState(() {
@@ -30,7 +42,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> deleteUser(String id) async {
-    final response = await http.delete(Uri.parse('http://localhost:4000/api/users/$id'));
+    final response =
+        await http.delete(Uri.parse('http://localhost:4000/api/users/$id'));
     if (response.statusCode == 200) {
       setState(() {
         userData.removeWhere((user) => user['_id'] == id);
@@ -38,7 +51,8 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  Future<void> updateUser(String id, String firstName, String lastName, String avatar) async {
+  Future<void> updateUser(
+      String id, String firstName, String lastName, String avatar) async {
     final response = await http.put(
       Uri.parse('http://localhost:4000/api/users/$id'),
       headers: {"Content-Type": "application/json"},
@@ -78,6 +92,14 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text('User List'),
         backgroundColor: Colors.indigo[900],
+        actions: [
+          ElevatedButton(
+            onPressed: () async {
+              await createUsers();
+            },
+            child: Text('Create Users'),
+          ),
+        ],
       ),
       body: ListView.builder(
         itemCount: userData.length,
@@ -120,7 +142,8 @@ class _HomePageState extends State<HomePage> {
                           return EditUserDialog(
                             user: userData[index],
                             onSave: (firstName, lastName, avatar) {
-                              updateUser(userData[index]['_id'], firstName, lastName, avatar);
+                              updateUser(userData[index]['_id'], firstName,
+                                  lastName, avatar);
                             },
                           );
                         },
