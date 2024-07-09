@@ -23,7 +23,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> createUsers() async {
     final response =
-        await http.get(Uri.parse('http://localhost:4000/api/users/create'));
+    await http.get(Uri.parse('http://localhost:4000/api/users/create'));
     data = json.decode(response.body);
 
     setState(() {
@@ -33,7 +33,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> getUsers() async {
     final response =
-        await http.get(Uri.parse('http://localhost:4000/api/users'));
+    await http.get(Uri.parse('http://localhost:4000/api/users'));
     data = json.decode(response.body);
 
     setState(() {
@@ -43,7 +43,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> deleteUser(String id) async {
     final response =
-        await http.delete(Uri.parse('http://localhost:4000/api/users/$id'));
+    await http.delete(Uri.parse('http://localhost:4000/api/users/$id'));
     if (response.statusCode == 200) {
       setState(() {
         userData.removeWhere((user) => user['_id'] == id);
@@ -90,14 +90,13 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('User List'),
-        backgroundColor: Colors.indigo[900],
+        title: const Text('User List'),
+        backgroundColor: Colors.deepOrangeAccent,
         actions: [
           ElevatedButton(
             onPressed: () async {
               await createUsers();
-            },
-            child: Text('Create Users'),
+            }, child: const Text('Create Users'),
           ),
         ],
       ),
@@ -113,7 +112,7 @@ class _HomePageState extends State<HomePage> {
                     padding: const EdgeInsets.all(12.0),
                     child: Text(
                       "$index",
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 20.0,
                         fontWeight: FontWeight.w500,
                       ),
@@ -126,14 +125,14 @@ class _HomePageState extends State<HomePage> {
                     padding: const EdgeInsets.all(10.0),
                     child: Text(
                       "${userData[index]['firstName']} ${userData[index]['lastName']}",
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 20.0,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
                   ),
                   IconButton(
-                    icon: Icon(Icons.edit),
+                    icon: const Icon(Icons.edit),
                     onPressed: () async {
                       // Abre un diálogo para editar el usuario
                       await showDialog(
@@ -142,8 +141,7 @@ class _HomePageState extends State<HomePage> {
                           return EditUserDialog(
                             user: userData[index],
                             onSave: (firstName, lastName, avatar) {
-                              updateUser(userData[index]['_id'], firstName,
-                                  lastName, avatar);
+                              updateUser(userData[index]['_id'], firstName, lastName, avatar);
                             },
                           );
                         },
@@ -151,7 +149,7 @@ class _HomePageState extends State<HomePage> {
                     },
                   ),
                   IconButton(
-                    icon: Icon(Icons.delete),
+                    icon: const Icon(Icons.delete),
                     onPressed: () {
                       deleteUser(userData[index]['_id']);
                     },
@@ -164,6 +162,7 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
 }
 
 class EditUserDialog extends StatefulWidget {
@@ -192,21 +191,21 @@ class _EditUserDialogState extends State<EditUserDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('Edit User'),
+      title: const Text('Edit User'),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           TextField(
             controller: firstNameController,
-            decoration: InputDecoration(labelText: 'First Name'),
+            decoration: const InputDecoration(labelText: 'First Name'),
           ),
           TextField(
             controller: lastNameController,
-            decoration: InputDecoration(labelText: 'Last Name'),
+            decoration: const InputDecoration(labelText: 'Last Name'),
           ),
           TextField(
             controller: avatarController,
-            decoration: InputDecoration(labelText: 'Avatar URL'),
+            decoration: const InputDecoration(labelText: 'Avatar URL'),
           ),
         ],
       ),
@@ -220,13 +219,13 @@ class _EditUserDialogState extends State<EditUserDialog> {
             );
             Navigator.of(context).pop();
           },
-          child: Text('Save'),
+          child: const Text('Save'),
         ),
         TextButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: Text('Cancel'),
+          child: const Text('Cancel'),
         ),
       ],
     );
